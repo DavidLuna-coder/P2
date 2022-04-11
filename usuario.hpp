@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include <unordered_set>
 
-
 // todo  --- Usuario Constructor ---
 // todo  --- Usuario Métodos observadores ---
 // todo  --- Usuario Invalido ---
@@ -49,7 +48,7 @@ public:
     typedef std::map<Numero, Tarjeta *> Tarjetas;
     typedef std::unordered_map<Articulo *, unsigned int> Articulos;
 
-    Usuario(const Cadena &id,const Cadena &nom, const Cadena &apell, const Cadena &dir, const Clave &cl);
+    Usuario(const Cadena &id, const Cadena &nom, const Cadena &apell, const Cadena &dir, const Clave &cl);
     Usuario(const Usuario &) = delete;
     Usuario &operator=(const Usuario &U) = delete;
 
@@ -67,10 +66,11 @@ public:
 
     class Id_duplicado
     {
-        public:
-        Id_duplicado(const Cadena& id);
-        Cadena idd() const {return idd_;}
-        private:
+    public:
+        Id_duplicado(const Cadena &id);
+        Cadena idd() const { return idd_; }
+
+    private:
         Cadena idd_;
     };
     ~Usuario();

@@ -1,6 +1,7 @@
 #include "usuario.hpp"
-#include <cstdlib>
+#include <random>
 #include <unistd.h>
+#include <cstring>
 Clave::Clave(const char* clave)
 {
     Cadena CL(clave);
@@ -8,8 +9,10 @@ Clave::Clave(const char* clave)
     {
         throw Incorrecta(Razon::CORTA);
     }
-
-    clave_ = crypt(clave,"qwertyuiopasdfghjklñzxcmvnb");
+    std::random_device r;
+    std::uniform_int_distribution<char> dist('0','z');
+    const char salt[3] = {dist(r),dist(r),'\0'};
+    clave_ = crypt(clave,salt);
     if (clave_ == nullptr)
     {
         throw Incorrecta(Razon::ERROR_CRYPT);
@@ -19,9 +22,7 @@ Clave::Clave(const char* clave)
 
 bool Clave::verifica(const char* cl) const
 {
-    const char* cifr;
-    cifr = crypt(cl,"qwertyuiopasdfghjklñzxcmvnb");
-    if (cl == clave_)
+    if (strcmp(crypt(cl,clave_.c_str()),clave_.c_str()))
     {
         return true;
     }
@@ -33,7 +34,6 @@ Usuario::Usuario(const Cadena &id,const Cadena &nom, const Cadena &apell, const 
 {   
     if (!IDs_.insert(id).second)
     {
-        
+        throw Id_duplicado(id);
     }
-    
 }
