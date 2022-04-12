@@ -5,11 +5,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
-// todo  --- Usuario Constructor ---
-// todo  --- Usuario Métodos observadores ---
-// todo  --- Usuario Invalido ---
-// todo  --- Usuario Asociaciones ---
-// todo  --- Operadores de Flujo ---
+
+//! OPERADORES DE FLUJO Y DESTRUCTOR;
 
 class Tarjeta;
 class Numero;
@@ -52,16 +49,16 @@ public:
     Usuario(const Usuario &) = delete;
     Usuario &operator=(const Usuario &U) = delete;
 
-    const Cadena &id() const;
-    const Cadena &nombre() const;
-    const Cadena &apellidos() const;
-    const Cadena &direccion() const;
-    const Tarjetas &tarjetas() const;
-    const Articulos &compra() const;
+    const Cadena &id() const {return id_;}
+    const Cadena &nombre() const{return nom_;}
+    const Cadena &apellidos() const{return apell_;}
+    const Cadena &direccion() const{return dir_;}
+    const Tarjetas &tarjetas() const{return T;}
+    const Articulos &compra() const{return A;}
 
-    void es_titular_de(const Tarjeta &);
-    void no_es_titular_de(const Tarjeta &);
-    void compra(const Articulo &A, int cantidad = 1);
+    void es_titular_de(Tarjeta &);
+    void no_es_titular_de(Tarjeta &);
+    void compra(Articulo &A, int cantidad = 1);
     int n_articulos() const;
 
     class Id_duplicado

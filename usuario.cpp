@@ -2,6 +2,7 @@
 #include <random>
 #include <unistd.h>
 #include <cstring>
+#include "tarjeta.hpp"
 Clave::Clave(const char* clave)
 {
     Cadena CL(clave);
@@ -30,10 +31,34 @@ bool Clave::verifica(const char* cl) const
         return false;
 }
 
+//* Constructor USUARIO
 Usuario::Usuario(const Cadena &id,const Cadena &nom, const Cadena &apell, const Cadena &dir, const Clave &cl): nom_(nom),apell_(apell),dir_(dir),cl_(cl)
 {   
     if (!IDs_.insert(id).second)
     {
         throw Id_duplicado(id);
+    }
+}
+
+//* ASOCIACIONES
+void Usuario::es_titular_de(Tarjeta& Tar)
+{
+    T[Tar.numero()] = &Tar;
+}
+
+void Usuario::no_es_titular_de(Tarjeta& Tar)
+{
+    T.erase(Tar.numero());
+}
+
+void Usuario::compra(Articulo &Art, int cantidad = 1)
+{
+    if (cantidad <= 0)
+    {
+        A.erase(&Art);
+    }
+    else
+    {
+        A[&Art] = cantidad;
     }
 }

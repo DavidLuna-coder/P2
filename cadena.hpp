@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <iterator>
+#include <string>
 class Cadena
 {
 private:
@@ -10,11 +11,11 @@ private:
     unsigned tam_;
     
 public:
-    explicit Cadena(unsigned t = 0, char c = '\0');
+    explicit Cadena(unsigned t = 0, char c = ' ');
     Cadena(const Cadena& S);
     Cadena(const char* S);
     Cadena(Cadena&& S);
-    Cadena substr(int i, unsigned t) const;
+    Cadena substr(int i, int t) const;
 
     char at (int n) const;
     char& at (int n);
@@ -26,7 +27,7 @@ public:
     char& operator[](int n);
 
     Cadena& operator+=(const Cadena& C);   
-    friend Cadena operator+ (Cadena& S, Cadena& C);
+    friend Cadena operator+ (const Cadena& S,const Cadena& C);
     const char* c_str() const;
 
     unsigned length() const;
@@ -65,25 +66,27 @@ bool operator != (const Cadena& S, const Cadena& C);
 std::ostream& operator <<(std::ostream& os, const Cadena& C);
 std::istream& operator >>(std::istream& is, Cadena& C);
 
-//todo Para P2 y ss.
-//* Especialización de la plantilla hash<T>para definir la
-//* función hash a utilizar con contenedores desordenados de
-//* Cadena, unordered_[set|map|multiset|multimap].
-namespace std { // Estaremos dentro del espacio de nombres std
+// Para P2 y ss.
+// Especialización de la plantilla hash<T>para definir la
+// función hash a utilizar con contenedores desordenados de
+// Cadena, unordered_[set|map|multiset|multimap].
+namespace std 
+{ // Estaremos dentro del espacio de nombres std
 template <> // Es una especialización de una plantilla para Cadena
 struct hash<Cadena> { // Es una clase con solo un operador publico
 size_t operator() (const Cadena& cad) const // El operador función
 {
 hash<string> hs;
-// Creamos un objeto hash de string
-const char * p = cad.c_str(); // Obtenemos la cadena de la Cadena
+ // Creamos un objeto hash de string
+const char* p = cad.c_str(); // Obtenemos la cadena de la Cadena
 string s(p);
-// Creamos un string desde una cadena
+ // Creamos un string desde una cadena
 size_t res = hs(s);
-// El hash del string. Como hs.operator()(s);
+ // El hash del string. Como hs.operator()(s);
 return res;
-// Devolvemos el hash del string
+ // Devolvemos el hash del string
 }
 };
 }
+
 #endif

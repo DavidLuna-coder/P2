@@ -1,34 +1,35 @@
 #include "cadena.hpp"
 #include <cstring>
 #include <stdexcept>
-
+#include <cassert>
+#include <iomanip>
 Cadena::Cadena(unsigned t, char c)
 {
     tam_ = t;
-    s_ = new char[t+1];
-    for (int i = 0; i <t; i++)
+    s_ = new char[t + 1];
+    for (int i = 0; i < t; i++)
     {
         s_[i] = c;
     }
     s_[t] = '\0';
 }
 
-Cadena::Cadena(const char* S)
+Cadena::Cadena(const char *S)
 {
     tam_ = strlen(S);
     s_ = new char[tam_ + 1];
 
-    strcpy(s_,S);
+    strcpy(s_, S);
 }
 
-Cadena::Cadena(const Cadena& S)
+Cadena::Cadena(const Cadena &S)
 {
     s_ = new char[S.tam_ + 1];
     tam_ = S.tam_;
-    strcpy(s_,S.s_);
+    strcpy(s_, S.s_);
 }
 
-Cadena& Cadena::operator= (const Cadena& S)
+Cadena &Cadena::operator=(const Cadena &S)
 {
     if (this != &S)
     {
@@ -38,12 +39,12 @@ Cadena& Cadena::operator= (const Cadena& S)
             tam_ = S.tam_;
             s_ = new char[S.tam_ + 1];
         }
-        strcpy(s_,S.s_);
+        strcpy(s_, S.s_);
     }
     return *this;
 }
 
-Cadena& Cadena::operator= (const char* S)
+Cadena &Cadena::operator=(const char *S)
 {
     if (tam_ != strlen(S))
     {
@@ -51,31 +52,31 @@ Cadena& Cadena::operator= (const char* S)
         tam_ = strlen(S);
         s_ = new char[tam_ + 1];
     }
-    strcpy(s_,S);
-    return* this;
+    strcpy(s_, S);
+    return *this;
 }
 
-const char* Cadena::c_str() const
+const char *Cadena::c_str() const
 {
     return s_;
 }
 
-Cadena& Cadena::operator+=(const Cadena& C)
+Cadena &Cadena::operator+=(const Cadena &C)
 {
     unsigned tam = this->tam_ + C.tam_;
     Cadena Cad{tam};
-    strcpy(Cad.s_,this->s_);
+    strcpy(Cad.s_, this->s_);
     strcat(Cad.s_, C.s_);
     *this = Cad;
     return *this;
 }
 
-Cadena operator+ (Cadena& S, Cadena& C)
+Cadena operator+(const Cadena &S, const Cadena &C)
 {
     unsigned tam = S.tam_ + C.tam_;
     Cadena Cad{tam};
-    strcpy(Cad.s_,S.s_);
-    strcat(Cad.s_,C.s_);
+    strcpy(Cad.s_, S.s_);
+    strcat(Cad.s_, C.s_);
     return Cad;
 }
 
@@ -84,97 +85,101 @@ char Cadena::operator[](int n) const
     return s_[n];
 }
 
-char& Cadena::operator[](int n)
+char &Cadena::operator[](int n)
 {
     return s_[n];
 }
-unsigned Cadena:: length() const
+unsigned Cadena::length() const
 {
     return tam_;
 }
 
 char Cadena::at(int n) const
 {
-    if (n < 0 || n > tam_ - 1)
+    if (n < 0 || n >= tam_)
     {
         throw std::out_of_range("Fuera de rango");
     }
-    
+
     return s_[n];
 }
 
-char& Cadena::at(int n)
+char &Cadena::at(int n)
 {
-    if (n < 0 || n > tam_ - 1)
+    if (n < 0 || n > tam_)
     {
         throw std::out_of_range("Fuera de rango");
     }
-    
+
     return s_[n];
 }
 
-bool operator== (const Cadena& S, const Cadena& C)
+bool operator==(const Cadena &S, const Cadena &C)
 {
-    if(strcmp(S.c_str(),C.c_str()) == 0)
+    if (strcmp(S.c_str(), C.c_str()) == 0)
         return true;
     else
         return false;
 }
 
-bool operator != (const Cadena& S, const Cadena& C)
+bool operator!=(const Cadena &S, const Cadena &C)
 {
-    return !(S==C);
+    return !(S == C);
 }
 
-bool operator < (const Cadena& S, const Cadena& C)
+bool operator<(const Cadena &S, const Cadena &C)
 {
-    if(strcmp(S.c_str(),C.c_str()) > 0)
+    if (strcmp(S.c_str(), C.c_str()) < 0)
         return true;
     else
         return false;
 }
 
-bool operator > (const Cadena& S, const Cadena& C)
+bool operator>(const Cadena &S, const Cadena &C)
 {
     return !((S < C) || (S == C));
 }
 
-bool operator <= (const Cadena& S, const Cadena& C)
+bool operator<=(const Cadena &S, const Cadena &C)
 {
-    return (S<C || S==C);
+    return (S < C || S == C);
 }
 
-bool operator >= (const Cadena& S, const Cadena& C)
+bool operator>=(const Cadena &S, const Cadena &C)
 {
     return (S > C || S == C);
 }
 
-Cadena Cadena::substr(int i, unsigned t) const
+Cadena Cadena::substr(int i, int t) const
 {
-    if (i > tam_ - 1 || i < 0 || i + t > tam_ - 1)
+    
+    if (i < 0 || i + t > tam_|| t < 0)
     {
         throw std::out_of_range("Fuera de rango");
     }
-
-    Cadena C{t};
-    for (size_t j = 0; j < t; j++)
+    else
     {
-        C[j] = s_[j+i];
+        Cadena C{t};
+        for (size_t j = 0; j < t; j++)
+        {
+            C[j] = s_[j + i];
+        }
+        
+        return C;
     }
     
-    return C;
+    
 }
 
-
-Cadena::Cadena(Cadena&& S): s_(S.s_), tam_(S.tam_)
+Cadena::Cadena(Cadena &&S) : s_(S.s_), tam_(S.tam_)
 {
-    S.s_ == nullptr;
-    tam_ = 0;
+    S.s_ = nullptr;
+    S.tam_ = 0;
 }
 
-Cadena& Cadena::operator=(Cadena&& S)
+Cadena &Cadena::operator=(Cadena &&S)
 {
-    if(this != &S)
+    if (this != &S)
     {
         delete[] s_;
 
@@ -187,24 +192,25 @@ Cadena& Cadena::operator=(Cadena&& S)
     return *this;
 }
 
-std::ostream& operator <<(std::ostream& os, const Cadena& C)
+std::ostream &operator<<(std::ostream &os, const Cadena &C)
 {
     os << C.c_str();
     return os;
 }
 
-std::istream& operator >>(std::istream& is, Cadena& C)
+std::istream &operator>>(std::istream &is, Cadena &C)
 {
-    char s[80];
-    is >> s;
+    char s[33];
+    s[0] = '\0';
+    is >> std::setw(sizeof(s))>>s;
     Cadena S{s};
     C = std::move(S);
     return is;
 }
 
-//Iteradores
+// Iteradores
 
-Cadena::iterator Cadena::begin() 
+Cadena::iterator Cadena::begin()
 {
     return s_;
 }
@@ -216,7 +222,7 @@ Cadena::const_iterator Cadena::begin() const
 
 Cadena::iterator Cadena::end()
 {
-    return s_ + length() + 1;
+    return s_ + length();
 }
 
 Cadena::const_iterator Cadena::end() const
@@ -231,7 +237,7 @@ Cadena::const_iterator Cadena::cbegin() const
 
 Cadena::const_iterator Cadena::cend() const
 {
-    return s_ + length() + 1;
+    return s_ + length();
 }
 
 Cadena::reverse_iterator Cadena::rbegin()
