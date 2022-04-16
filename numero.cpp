@@ -36,7 +36,7 @@ Numero::Numero(Cadena& C)
 }
 
 
-Numero::operator const char *()
+Numero::operator const char *() const
 {
     return num_.c_str();
 }

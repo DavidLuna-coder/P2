@@ -1,6 +1,7 @@
 #ifndef _TARJETA_
 #define _TARJETA_
 
+#include <iostream>
 #include <unordered_set>
 #include "fecha.hpp"
 #include "numero.hpp"
@@ -29,6 +30,7 @@ public:
     bool activa() const{return activa_;};
     bool activa(bool estado = true){activa_ = estado; return activa_;};
     const Tipo tipo() const;
+
     class Caducada
     {
     public:
@@ -62,4 +64,7 @@ public:
 };
 
 const Usuario* Tarjeta::TITULAR_NULO(nullptr);
+
+std::ostream& operator << (std::ostream& os, Tarjeta::Tipo t);
+std::ostream& operator << (std::ostream& os, Tarjeta T);
 #endif

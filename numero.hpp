@@ -16,7 +16,7 @@ class Numero
             Razon r;
     };
 
-    operator const char*();
+    operator const char*() const;
     friend bool operator < (const Numero& N,const Numero& M);
     friend Tarjeta;
     private:

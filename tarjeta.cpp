@@ -1,7 +1,7 @@
 #include "tarjeta.hpp"
 #include "usuario.hpp"
 #include "numero.hpp"
-
+#include <iomanip>
 Tarjeta::Tarjeta(const Numero &num, Usuario &titular, const Fecha &f) : num_(num), titular_(&titular), caducidad_(f), activa_(true)
 {
     if (!tarjetas_.insert(num_).second)
@@ -43,6 +43,34 @@ const Tarjeta::Tipo Tarjeta::tipo() const
 
 void Tarjeta::anula_titular()
 {
-    if(titular_ != TITULAR_NULO)
+    if (titular_ != TITULAR_NULO)
         titular_ = TITULAR_NULO;
+}
+
+std::ostream &operator<<(std::ostream &os, Tarjeta::Tipo t)
+{
+    if (t == Tarjeta::Otro)
+        os << "Otro";
+    else if (t == Tarjeta::VISA)
+        os << "VISA";
+    else if (t == Tarjeta::Mastercard)
+        os << "Mastercard";
+    else if (t == Tarjeta::Maestro)
+        os << "Maestro";
+    else if (t == Tarjeta::JCB)
+        os << "JCB";
+    else if (t == Tarjeta::AmericanExpress)
+        os << "AmericanExpress";
+
+    return os;
+}
+
+std::ostream &operator<<(std::ostream &os, Tarjeta T)
+{
+    os << T.tipo() << '\n';
+    os << T.numero() << '\n';
+    os << T.titular().nombre() << " ";
+    os << T.titular().apellidos() << '\n';
+    os << "Caduca: " << std::setw(2) << std::setfill('0') << T.caducidad().mes() << '/' << std::setw(2) << std::setfill('0') << T.caducidad().anno() % 100;
+    return os;
 }
