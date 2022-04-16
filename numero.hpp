@@ -18,6 +18,7 @@ class Numero
 
     operator const char*();
     friend bool operator < (const Numero& N,const Numero& M);
+    friend Tarjeta;
     private:
     Cadena num_;
 };

@@ -41,12 +41,12 @@ Usuario::Usuario(const Cadena &id,const Cadena &nom, const Cadena &apell, const 
 }
 
 //* ASOCIACIONES
-void Usuario::es_titular_de(Tarjeta& Tar)
+void Usuario::es_titular_de(Tarjeta& Tar) const
 {
     T[Tar.numero()] = &Tar;
 }
 
-void Usuario::no_es_titular_de(Tarjeta& Tar)
+void Usuario::no_es_titular_de(Tarjeta& Tar) const
 {
     T.erase(Tar.numero());
 }
@@ -61,4 +61,9 @@ void Usuario::compra(Articulo &Art, int cantidad = 1)
     {
         A[&Art] = cantidad;
     }
+}
+
+Usuario::~Usuario()
+{
+
 }

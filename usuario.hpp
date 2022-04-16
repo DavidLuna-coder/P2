@@ -56,8 +56,8 @@ public:
     const Tarjetas &tarjetas() const{return T;}
     const Articulos &compra() const{return A;}
 
-    void es_titular_de(Tarjeta &);
-    void no_es_titular_de(Tarjeta &);
+    void es_titular_de(Tarjeta &) const;
+    void no_es_titular_de(Tarjeta &) const;
     void compra(Articulo &A, int cantidad = 1);
     int n_articulos() const;
 
@@ -80,7 +80,7 @@ private:
     const Cadena apell_;
     const Cadena dir_;
     Clave cl_;
-    Tarjetas T;
+    mutable Tarjetas T;
     Articulos A;
 };
 
