@@ -15,8 +15,7 @@ Tarjeta::Tarjeta(const Numero &num, Usuario &titular, const Fecha &f) : num_(num
     {
         throw Caducada(f);
     }
-
-    titular_->es_titular_de(*this);
+    const_cast<Usuario*>(titular_)->es_titular_de(*this);
 }
 
 const Tarjeta::Tipo Tarjeta::tipo() const

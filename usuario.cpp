@@ -42,12 +42,12 @@ Usuario::Usuario(const Cadena &id,const Cadena &nom, const Cadena &apell, const 
 }
 
 //* ASOCIACIONES
-void Usuario::es_titular_de(Tarjeta& Tar) const
+void Usuario::es_titular_de(Tarjeta& Tar)
 {
     T[Tar.numero()] = &Tar;
 }
 
-void Usuario::no_es_titular_de(Tarjeta& Tar) const
+void Usuario::no_es_titular_de(Tarjeta& Tar)
 {
     T.erase(Tar.numero());
 }
