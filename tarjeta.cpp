@@ -1,6 +1,7 @@
 #include "tarjeta.hpp"
 #include "usuario.hpp"
 #include "numero.hpp"
+#include <iostream>
 #include <iomanip>
 Tarjeta::Tarjeta(const Numero &num, Usuario &titular, const Fecha &f) : num_(num), titular_(&titular), caducidad_(f), activa_(true)
 {
@@ -65,7 +66,7 @@ std::ostream &operator<<(std::ostream &os, Tarjeta::Tipo t)
     return os;
 }
 
-std::ostream &operator<<(std::ostream &os, Tarjeta T)
+std::ostream &operator<<(std::ostream &os, const Tarjeta& T)
 {
     os << T.tipo() << '\n';
     os << T.numero() << '\n';

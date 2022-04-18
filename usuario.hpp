@@ -61,6 +61,9 @@ public:
     void compra(Articulo &A, int cantidad = 1);
     int n_articulos() const;
 
+    friend std::ostream& operator << (std::ostream& os, const Usuario& U);
+
+
     class Id_duplicado
     {
     public:
@@ -92,4 +95,8 @@ inline typename Clave::Razon Clave::Incorrecta::razon() const
 {
     return Clave::Incorrecta::razon_;
 }
+
+std::ostream& operator << (std::ostream& os, const Usuario& U);
+
+std::ostream& mostrar_carro(std::ostream& os,const Usuario& U);
 #endif

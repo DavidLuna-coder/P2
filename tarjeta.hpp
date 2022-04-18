@@ -66,5 +66,5 @@ public:
 const Usuario* Tarjeta::TITULAR_NULO(nullptr);
 
 std::ostream& operator << (std::ostream& os, Tarjeta::Tipo t);
-std::ostream& operator << (std::ostream& os, Tarjeta T);
+std::ostream& operator << (std::ostream& os, const Tarjeta& T);
 #endif

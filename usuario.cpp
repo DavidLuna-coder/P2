@@ -2,6 +2,7 @@
 #include <random>
 #include <unistd.h>
 #include <cstring>
+#include "articulo.hpp"
 #include "tarjeta.hpp"
 Clave::Clave(const char* clave)
 {
@@ -63,7 +64,33 @@ void Usuario::compra(Articulo &Art, int cantidad = 1)
     }
 }
 
+std::ostream& operator << (std::ostream& os, const Usuario& U)
+{
+    os << U.id_ << " [" << U.cl_.clave() <<"]" << U.nom_ << U.apell_ << std::endl;
+    os << U.dir_ << std::endl;
+    os << "Tarjetas: " << std::endl;
+
+    for(auto it = U.T.begin(); it != U.T.end(); it++)
+    {
+        os << *(it->second) << std::endl;
+    }
+}
+
+std::ostream& mostrar_carro(std::ostream& os, const Usuario& U)
+{
+    os << "Carrito de compra de " << U.id() << " [" << U.compra().size()<<"] " << std::endl;
+    os << "------------------------------------------------------------------------"<<std::endl;
+    os << "------------------------------------------------------------------------"<<std::endl;
+    for (auto it = U.compra().begin();it != U.compra().end(); it++)
+    {
+        os<<"\t" << it->second <<"\t"<< it->first << std::endl;
+    }
+}
+
 Usuario::~Usuario()
 {
-
+    for (auto it = T.begin(); it != T.end(); it++)
+    {
+        it->second->anula_titular();
+    }
 }

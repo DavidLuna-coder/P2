@@ -15,12 +15,14 @@ public:
     float& precio();
     unsigned stock() const;
     unsigned& stock();
+    ~Articulo();
 private:
     const Cadena ref_;
     const Cadena titulo_;
     const Fecha f_publi_;
     float precio_;
     unsigned stock_;
+
 };
 
 std::ostream& operator<<(std::ostream &os, const Articulo& A);
