@@ -1,21 +1,27 @@
 #include "tarjeta.hpp"
 #include "usuario.hpp"
-#include "numero.hpp"
+#include "cadena.hpp"
+#include <cstring>
 #include <iostream>
 #include <iomanip>
+#include <set>
+
+std::set<Numero> Tarjeta:: tarjetas_;
 Tarjeta::Tarjeta(const Numero &num, Usuario &titular, const Fecha &f) : num_(num), titular_(&titular), caducidad_(f), activa_(true)
 {
-    if (!tarjetas_.insert(num_).second)
-    {
-        throw Num_duplicado(num_);
-    }
-
     Fecha hoy;
     if (f < hoy)
     {
         throw Caducada(f);
     }
     const_cast<Usuario*>(titular_)->es_titular_de(*this);
+    
+    if (!tarjetas_.insert(num_).second)
+    {
+        throw Num_duplicado(num_);
+    }
+
+    
 }
 
 const Tarjeta::Tipo Tarjeta::tipo() const
@@ -43,8 +49,8 @@ const Tarjeta::Tipo Tarjeta::tipo() const
 
 void Tarjeta::anula_titular()
 {
-    if (titular_ != TITULAR_NULO)
-        titular_ = TITULAR_NULO;
+    if (titular_ != nullptr)
+        titular_ = nullptr;
 }
 
 std::ostream &operator<<(std::ostream &os, Tarjeta::Tipo t)
@@ -73,4 +79,57 @@ std::ostream &operator<<(std::ostream &os, const Tarjeta& T)
     os << T.titular().apellidos() << '\n';
     os << "Caduca: " << std::setw(2) << std::setfill('0') << T.caducidad().mes() << '/' << std::setw(2) << std::setfill('0') << T.caducidad().anno() % 100;
     return os;
+}
+
+
+Tarjeta::~Tarjeta()
+{
+
+    tarjetas_.erase(num_);
+}
+
+bool luhn(const Cadena& numero);
+Numero::Numero(const Cadena& C)
+{
+    char aux[C.length() + 1];
+    
+    int i = 0;
+
+    for(int j = 0; j != C.length(); j++)
+    {
+        if (isdigit(C[j]) )
+        {
+            aux[i] = C[j];
+            i++; 
+        }
+        else if(isalpha(C[j]))
+        {
+            throw Incorrecto(DIGITOS);
+        }
+    }
+    aux[i] = '\0';
+    Cadena AUX = aux;
+
+    if (!luhn(AUX))
+    {
+        throw Incorrecto(NO_VALIDO);
+    }
+    if (AUX.length() < 13 || AUX.length() > 19)
+    {
+        throw Incorrecto(LONGITUD);
+    }
+    
+    
+
+    num_ = AUX;
+}
+
+Numero::operator const char *() const
+{
+    return num_.c_str();
+}
+
+bool operator < (const Numero& N,const Numero& M)
+{
+    return N.num_ < M.num_;
 }

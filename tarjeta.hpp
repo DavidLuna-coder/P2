@@ -2,14 +2,36 @@
 #define _TARJETA_
 
 #include <iostream>
-#include <unordered_set>
+#include "cadena.hpp"
+#include <set>
 #include "fecha.hpp"
-#include "numero.hpp"
 class Usuario;
+class Tarjeta;
+class Numero
+{
+    public:
+    //Numero(const char* num);
+    Numero(const Cadena& );
+    enum Razon {LONGITUD, DIGITOS, NO_VALIDO};
+    class Incorrecto
+    {
+        public:
+            Razon razon(){return r;}
+            Incorrecto(Razon raz):r(raz){};
+        private:
+            Razon r;
+    };
+    friend Tarjeta;
+    operator const char*() const;
+    friend bool operator < (const Numero& N,const Numero& M);
+    private:
+    Cadena num_;
+};
+
 class Tarjeta
 {
 public:
-    static const Usuario* TITULAR_NULO;
+    //static const Usuario* TITULAR_NULO;
     enum Tipo
     {
         Otro,
@@ -28,9 +50,8 @@ public:
     const Usuario &titular() const{return *titular_;};
     const Fecha &caducidad() const{return caducidad_;};
     bool activa() const{return activa_;};
-    bool activa(bool estado = true){activa_ = estado; return activa_;};
+    bool activa(bool estado){activa_ = estado; return activa_;};
     const Tipo tipo() const;
-
     class Caducada
     {
     public:
@@ -53,8 +74,10 @@ public:
     class Desactivada;
 
     friend Usuario;
+
+    ~Tarjeta();
     private: 
-    static std::unordered_set<Numero> tarjetas_;
+    static std::set<Numero> tarjetas_;
     const Numero num_;
     const Usuario*  titular_;
     const Fecha caducidad_;
@@ -63,8 +86,11 @@ public:
     void anula_titular();
 };
 
-const Usuario* Tarjeta::TITULAR_NULO(nullptr);
+//const Usuario* Tarjeta::TITULAR_NULO(nullptr);
 
 std::ostream& operator << (std::ostream& os, Tarjeta::Tipo t);
 std::ostream& operator << (std::ostream& os, const Tarjeta& T);
+
+
+bool operator < (const Numero& N,const Numero& M);
 #endif

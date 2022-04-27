@@ -4,18 +4,20 @@
 #include <cstring>
 #include "articulo.hpp"
 #include "tarjeta.hpp"
+#include "cadena.hpp"
+
+Usuario::IDs Usuario::IDs_;
 Clave::Clave(const char* clave)
 {
-    Cadena CL(clave);
-    if (CL.length() < 5)
+    if (strlen(clave) < 5)
     {
         throw Incorrecta(Razon::CORTA);
     }
     std::random_device r;
     std::uniform_int_distribution<char> dist('0','z');
-    const char salt[3] = {dist(r),dist(r),'\0'};
+    const char salt[2] = {dist(r),dist(r)};
     clave_ = crypt(clave,salt);
-    if (clave_ == nullptr)
+    if (clave_.c_str() == nullptr)
     {
         throw Incorrecta(Razon::ERROR_CRYPT);
     }
@@ -52,7 +54,7 @@ void Usuario::no_es_titular_de(Tarjeta& Tar)
     T.erase(Tar.numero());
 }
 
-void Usuario::compra(Articulo &Art, int cantidad = 1)
+void Usuario::compra(Articulo &Art, int cantidad)
 {
     if (cantidad <= 0)
     {
@@ -74,6 +76,8 @@ std::ostream& operator << (std::ostream& os, const Usuario& U)
     {
         os << *(it->second) << std::endl;
     }
+
+    return os;
 }
 
 std::ostream& mostrar_carro(std::ostream& os, const Usuario& U)
@@ -83,8 +87,10 @@ std::ostream& mostrar_carro(std::ostream& os, const Usuario& U)
     os << "------------------------------------------------------------------------"<<std::endl;
     for (auto it = U.compra().begin();it != U.compra().end(); it++)
     {
-        os<<"\t" << it->second <<"\t"<< it->first << std::endl;
+        os<<"\t" << it->second <<"\t"<< *(it->first) << std::endl;
     }
+
+    return os;
 }
 
 Usuario::~Usuario()

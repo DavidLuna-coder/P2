@@ -1,7 +1,9 @@
 #include "numero.hpp"
 #include "cadena.hpp"
+#include "tarjeta.hpp"
+#include <cstring>
 bool luhn(const Cadena& numero);
-Numero::Numero(Cadena& C)
+Numero::Numero(const Cadena& C)
 {
     char aux[C.length() + 1];
     
@@ -20,9 +22,9 @@ Numero::Numero(Cadena& C)
         }
     }
     aux[i] = '\0';
-    C = aux;
+    Cadena AUX = aux;
 
-    if (C.length() < 13 || C.length() > 19)
+    if (AUX.length() < 13 || AUX.length() > 19)
     {
         throw Incorrecto(LONGITUD);
     }
@@ -32,9 +34,8 @@ Numero::Numero(Cadena& C)
         throw Incorrecto(NO_VALIDO);
     }
 
-    num_ = C;
+    num_ = AUX;
 }
-
 
 Numero::operator const char *() const
 {

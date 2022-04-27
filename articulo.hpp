@@ -15,7 +15,6 @@ public:
     float& precio();
     unsigned stock() const;
     unsigned& stock();
-    ~Articulo();
 private:
     const Cadena ref_;
     const Cadena titulo_;

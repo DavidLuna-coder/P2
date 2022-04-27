@@ -6,8 +6,7 @@
 #include <unordered_set>
 
 
-//! OPERADORES DE FLUJO Y DESTRUCTOR;
-
+class Cadena;
 class Tarjeta;
 class Numero;
 class Articulo;
@@ -67,7 +66,7 @@ public:
     class Id_duplicado
     {
     public:
-        Id_duplicado(const Cadena &id);
+        Id_duplicado(const Cadena &id):idd_(id){};
         Cadena idd() const { return idd_; }
 
     private:
