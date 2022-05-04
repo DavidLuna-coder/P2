@@ -98,7 +98,7 @@ std::ostream& mostrar_carro(std::ostream& os, const Usuario& U)
 
     for (auto it = U.compra().begin();it != U.compra().end(); it++)
     {
-        os<<"\t" << it->second <<"\t"<<"[" << it->first->referencia() << "] " <<'"'<< it->first->titulo()<<'"'<<", "<<it->first->f_publi().anno()<<". " <<std::setprecision(4)<<std::setfill('0')<< it->first->precio()<<" €" << std::endl;
+        os<<"\t" << it->second <<"\t"<<"[" << it->first->referencia() << "] " <<'"'<< it->first->titulo()<<'"'<<", "<<it->first->f_publi().anno()<<". " <<std::fixed << std::setprecision(2)<< it->first->precio()<<" €" << std::endl;
     }
 
     return os;
