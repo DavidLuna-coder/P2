@@ -16,7 +16,7 @@ class Numero
     class Incorrecto
     {
         public:
-            Razon razon(){return r;}
+            Razon razon() const{return r;}
             Incorrecto(Razon raz):r(raz){};
         private:
             Razon r;
@@ -47,7 +47,7 @@ public:
     Tarjeta &operator=(const Tarjeta &) = delete;
 
     const Numero &numero() const{return num_;};
-    const Usuario &titular() const{return *titular_;};
+    const Usuario* titular() const{return titular_;};
     const Fecha &caducidad() const{return caducidad_;};
     bool activa() const{return activa_;};
     bool activa(bool estado){activa_ = estado; return activa_;};
@@ -56,7 +56,7 @@ public:
     {
     public:
         Caducada(const Fecha &F) : f(F){};
-        const Fecha &cuando(){return f;};
+        const Fecha &cuando() const{return f;};
 
     private:
         Fecha f;
@@ -66,12 +66,12 @@ public:
     {
         public:
         Num_duplicado(const Numero& n):numero_(n){};
-        const Numero& que(){return numero_;};
+        const Numero& que() const{return numero_;};
         private:
         Numero numero_;
     };
 
-    class Desactivada;
+    class Desactivada{};
 
     friend Usuario;
 
@@ -93,4 +93,5 @@ std::ostream& operator << (std::ostream& os, const Tarjeta& T);
 
 
 bool operator < (const Numero& N,const Numero& M);
+bool operator < (const Tarjeta& T1, const Tarjeta& T2);
 #endif

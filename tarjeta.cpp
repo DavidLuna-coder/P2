@@ -15,7 +15,7 @@ Tarjeta::Tarjeta(const Numero &num, Usuario &titular, const Fecha &f) : num_(num
         throw Caducada(f);
     }
     const_cast<Usuario*>(titular_)->es_titular_de(*this);
-    
+
     if (!tarjetas_.insert(num_).second)
     {
         throw Num_duplicado(num_);
@@ -73,10 +73,20 @@ std::ostream &operator<<(std::ostream &os, Tarjeta::Tipo t)
 
 std::ostream &operator<<(std::ostream &os, const Tarjeta& T)
 {
-    os << T.tipo() << '\n';
-    os << T.numero() << '\n';
-    os << T.titular().nombre() << " ";
-    os << T.titular().apellidos() << '\n';
+    os << T.tipo() << std::endl;
+    os << T.numero() << std::endl;
+    //os << T.titular()->nombre() << " ";
+    for (auto it= T.titular()->nombre().begin(); it != T.titular()->nombre().end(); it++)
+    {
+        os <<static_cast<char>(toupper(*it));
+    }
+    os << " ";
+    for (auto it= T.titular()->apellidos().begin(); it != T.titular()->apellidos().end(); it++)
+    {
+        os <<static_cast<char>(toupper(*it));
+    }
+    //os << T.titular()->apellidos() << std::endl;
+    os << " ";
     os << "Caduca: " << std::setw(2) << std::setfill('0') << T.caducidad().mes() << '/' << std::setw(2) << std::setfill('0') << T.caducidad().anno() % 100;
     return os;
 }
@@ -84,8 +94,11 @@ std::ostream &operator<<(std::ostream &os, const Tarjeta& T)
 
 Tarjeta::~Tarjeta()
 {
-
     tarjetas_.erase(num_);
+    if (titular_ != nullptr)
+    {
+        const_cast<Usuario*>(titular_)->no_es_titular_de(*this);
+    }
 }
 
 bool luhn(const Cadena& numero);
@@ -110,14 +123,16 @@ Numero::Numero(const Cadena& C)
     aux[i] = '\0';
     Cadena AUX = aux;
 
-    if (!luhn(AUX))
-    {
-        throw Incorrecto(NO_VALIDO);
-    }
     if (AUX.length() < 13 || AUX.length() > 19)
     {
         throw Incorrecto(LONGITUD);
     }
+
+    if (!luhn(AUX))
+    {
+        throw Incorrecto(NO_VALIDO);
+    }
+    
     
     
 
@@ -132,4 +147,9 @@ Numero::operator const char *() const
 bool operator < (const Numero& N,const Numero& M)
 {
     return N.num_ < M.num_;
+}
+
+bool operator < (const Tarjeta& T1, const Tarjeta& T2)
+{
+    return T1.numero() < T2.numero();
 }
